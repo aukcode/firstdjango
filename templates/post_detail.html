@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head_title %}{{ instance.title }} | {{ block.super }}Try django 1.9{% endblock head_title %}
+
+{% block content %}
+<br><br>
+<div class="col-sm-8 col-sm-offset-2">
+  {% if instance.image %}
+  <img src='{{ instance.image.url }}' class='img-responsive' />
+  {% endif %}
+  <hr>
+<a href="/posts" class="btn btn-default" role="button">Tilbake</a>
+{% if user.is_superuser or user.is_staff %}
+<a href="edit" class="btn btn-primary" role="button">Edit</a>
+<a href="delete" class="btn btn-danger" role="button">Delete</a>
+{% endif %}
+
+<h1>{{ title }}<br><small>{% if instance.draft %} <span style="color:red;">Draft</span> {% endif %}{{ instance.timestamp }}<br/></small></h1>
+<p>Author: {{ instance.user }}</p>
+<p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+</p>
+<hr>
+{{ instance.content|linebreaks }}<br/><br/><br/><br/>
+<p>
+<div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+
+
+<!-- <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+<img height="30" width="100" alt="W3Schools" src="https://i.stack.imgur.com/br4Br.png">
+</a>
+<a href="https://twitter.com/home?status=I'm%20going%20to%20learn%20to%20Code...%20Come%20build%20an%20web%20apsp%20with%20me!%20%23CFE%20and%20@justinmitchel%20{{ request.build_absolute_uri }}">
+Twitter
+</a>
+<div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Del</a></div>
+-->
+
+
+
+
+</p>
+
+
+
+</div>
+
+{% endblock content %}

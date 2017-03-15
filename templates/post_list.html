@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-sm-8 col-sm-offset-2">
+<h1>{{ title }}</h1>
+<form method="GET" action="">
+  <input type='text' name="q" placeholder="Search posts" value="{{ request.GET.q }}"/>
+  <input type="submit" value="Search"/>
+</form>
+<br><br>
+{% if user.is_superuser or user.is_staff %}
+<a href="create" class="btn btn-success btn-block btn-lg" role="button">New Post</a>
+{% endif %}
+<hr>
+
+
+{% for obj in  object_list %}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="thumbnail">
+        {% if obj.image %}
+        <a href="{% url 'posts:detail' obj.slug %}"> <img src='{{ obj.image.url }}' class='img-responsive' /> </a>
+        {% endif %}
+      <div class="caption">
+        <h3><a href="{% url 'posts:detail' obj.slug %}">{{ obj.title }}</a><br/>
+          <small>Posted {{ obj.timestamp|timesince }} ago
+          {% if obj.draft %} <span style="color:red;">Draft</span> {% endif %}</small></h3> <!-- obj.publish-->
+        <p>{{ obj.content|linebreaks|truncatechars:120 }}</p>
+        {% if user.is_superuser or user.is_staff %}
+        <p><a href="{% url 'posts:detail' obj.slug %}edit" class="btn btn-primary" role="button">Edit</a>
+          <a href="{% url 'posts:detail' obj.slug %}delete" class="btn btn-danger" role="button">Delete</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+
+
+
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+</div>
+</div>
+
+{% endblock content %}
